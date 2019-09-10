@@ -49,8 +49,7 @@ function Link({link, children}) {
       style={styles.link}
       href={link}
       target="_blank"
-      rel="noopener noreferrer"
-    >
+      rel="noopener noreferrer">
       {children}
     </a>
   );
@@ -58,27 +57,21 @@ function Link({link, children}) {
 
 export default function MeetupEvents() {
   const [data, setData] = React.useState(null);
-  React.useEffect(
-    () => {
-      if (!data) {
-        fetchQuery(QUERY_ID).then(res => setData(res));
-      }
-    },
-    [data, setData],
-  );
+  React.useEffect(() => {
+    if (!data) {
+      fetchQuery(QUERY_ID).then(res => setData(res));
+    }
+  }, [data, setData]);
   if (!data) {
     return null;
   }
   const events = data.meetup.makeRestCall.get.jsonBody.events;
-  const byDay = events.reduce(
-    (acc, event) => {
-      const dayEvents = acc[event.local_date] || [];
-      dayEvents.push(event);
-      acc[event.local_date] = dayEvents;
-      return acc;
-    },
-    {},
-  );
+  const byDay = events.reduce((acc, event) => {
+    const dayEvents = acc[event.local_date] || [];
+    dayEvents.push(event);
+    acc[event.local_date] = dayEvents;
+    return acc;
+  }, {});
   return (
     <div style={styles.container}>
       {Object.keys(byDay).map(localDate => {
@@ -89,8 +82,13 @@ export default function MeetupEvents() {
               {formatDate(new Date(localDate), 'EEEE, MMMM d')}
             </div>
             <div style={styles.eventsListing}>
-              {events.map(event => (
-                <div style={styles.event} key={event.id}>
+              {events.map((event, i) => (
+                <div
+                  style={{
+                    ...styles.event,
+                    ...(i === 0 ? styles.firstEvent : {}),
+                  }}
+                  key={event.id}>
                   <div style={styles.eventTime}>
                     <Link link={event.link}>
                       {formatTime(event.local_time)}
@@ -99,8 +97,7 @@ export default function MeetupEvents() {
                   <div style={styles.eventDetails}>
                     <div style={styles.eventGroup}>
                       <Link
-                        link={`https://www.meetup.com/${event.group.urlname}`}
-                      >
+                        link={`https://www.meetup.com/${event.group.urlname}`}>
                         {event.group.name}
                       </Link>
                     </div>
@@ -146,6 +143,7 @@ const styles = {
     fontSize: 16,
     display: 'flex',
   },
+  firstEvent: {borderWidth: 0},
   eventTime: {color: 'rgba(0,0,0,.54)', flexShrink: 0, lineHeight: 1.45},
   eventDetails: {paddingLeft: 16, marginBottom: 16},
   eventGroup: {
