@@ -44,4 +44,4 @@ yarn start
 
 Once you've done that, you can create new persisted queries that get events for different meetup groups or even create a list of events that you're planning to go to.
 
-If you need help, [hop in to our Spectrum chat](https://www.onegraph.com/chat).
+[Hop in to our Spectrum chat](https://www.onegraph.com/chat) if you have any questions or suggestions.
