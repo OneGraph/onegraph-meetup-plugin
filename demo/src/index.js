@@ -5,12 +5,7 @@ import MeetupPlugin from '../../src';
 
 class Demo extends Component {
   render() {
-    return (
-      <div>
-        <h1>onegraph-meetup-plugin Demo</h1>
-        <MeetupPlugin />
-      </div>
-    );
+    return <MeetupPlugin />;
   }
 }
 
